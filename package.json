@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/cwetanow/home-bot/issues"
   },
-  "homepage": "https://github.com/cwetanow/home-bot#readme"
+  "homepage": "https://github.com/cwetanow/home-bot#readme",
+  "dependencies": {
+    "@slack/client": "^4.3.1"
+  }
 }

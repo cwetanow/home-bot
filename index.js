@@ -1,20 +1,7 @@
-const hookToken = process.env.hookToken;
-const token = process.env.token;
-
-const { IncomingWebhook, RTMClient } = require('@slack/client');
+const { RTMClient } = require('@slack/client');
 
 const rtm = new RTMClient(token);
 rtm.start();
-
-const timeNotification = new IncomingWebhook(hookToken);
-
-const currentTime = new Date().toTimeString();
-timeNotification.send(`The current time is ${currentTime}`, (error, resp) => {
-  if (error) {
-    return console.error(error);
-  }
-  console.log('Notification sent');
-});
 
 rtm.on('message', (event) => {
   const message = event;

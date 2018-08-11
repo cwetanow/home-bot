@@ -2,20 +2,22 @@ const { RTMClient } = require('@slack/client');
 
 const config = require('./config');
 
-console.log(config)
+const utils = require('./utils')(config);
 
-const rtm = new RTMClient(token);
-rtm.start();
+console.log(utils);
 
-rtm.on('message', (event) => {
-  const message = event;
+// const rtm = new RTMClient(token);
+// rtm.start();
 
-  // Skip messages that are from a bot or my own user ID
-  if ((message.subtype && message.subtype === 'bot_message') ||
-    (!message.subtype && message.user === rtm.activeUserId)) {
-    return;
-  }
+// rtm.on('message', (event) => {
+//   const message = event;
 
-  // // Log the message
-  console.log(`(channel:${message.channel}) ${message.user} says: ${message.text}`);
-});
+//   // Skip messages that are from a bot or my own user ID
+//   if ((message.subtype && message.subtype === 'bot_message') ||
+//     (!message.subtype && message.user === rtm.activeUserId)) {
+//     return;
+//   }
+
+//   // // Log the message
+//   console.log(`(channel:${message.channel}) ${message.user} says: ${message.text}`);
+// });

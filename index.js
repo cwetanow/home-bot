@@ -1,5 +1,9 @@
 const { RTMClient } = require('@slack/client');
 
+const config = require('./config');
+
+console.log(config)
+
 const rtm = new RTMClient(token);
 rtm.start();
 

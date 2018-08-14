@@ -13,7 +13,8 @@ let url = 'https://routes.sofiatraffic.bg/resources/stops-bg.json';
   });
 }))
   .then(res => {
-    stops = res;
+    stops = res
+      .map(stop => { return { name: stop.n, code: stop.c } });
 
     url = 'https://routes.sofiatraffic.bg/resources/routes.json';
 
@@ -38,14 +39,38 @@ module.exports = (command, message) => {
       if (type === 'stop') {
         const stopName = params[2].toLowerCase();
 
-        const matched = stops.filter(s => s.n.toLowerCase().indexOf(stopName) >= 0);
+        const matched = stops.filter(s => s.name.toLowerCase().indexOf(stopName) >= 0);
         let result = '';
 
-        matched.forEach(s => {
-          result += `${s.n} ${s.c}\n`;
+        matched.forEach(stop => {
+          result += `${stop.name} ${stop.code}\n`;
         });
 
-        resolve(result);
+        return resolve(result);
+      }
+
+      if (type === 'code') {
+        const code = params[2];
+
+        url = `https://api-arrivals.sofiatraffic.bg/api/v1/arrivals/${code}/`;
+
+        request.get(url, (err, response, body) => {
+          body = JSON.parse(body);
+
+          let result = `${body.name}\n`;
+
+          body.lines.forEach(line => {
+            result += `${line.vehicle_type} ${line.name} `;
+
+            line.arrivals.forEach(arrival => {
+              result += ` ${arrival.time}`;
+            })
+
+            result += '\n';
+          });
+
+          resolve(result);
+        });
       }
     });
   };

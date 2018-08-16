@@ -4,30 +4,29 @@ require('dotenv').config();
 
 const MODULES_DIR = './modules/';
 
-const modules = fs
+const modules = {};
+
+fs
   .readdirSync(MODULES_DIR)
-  .map(item => require(MODULES_DIR + item));
-
-const messageSender = require('./message-sender');
-
-const onMessageSent = (message) => {
-  // console.log(`Command: ${message}, Time: ${new Date()}`)
-
-  const command = message.split(' ')[0];
-  let pendingResult = null;
-
-  modules.forEach(module => {
-    const moduleResult = module(command, message);
-    if (moduleResult) {
-      pendingResult = moduleResult;
-    }
+  .forEach(item => {
+    modules[item.replace('.js', '')] = require(MODULES_DIR + item);
   });
 
-  if (pendingResult) {
-    pendingResult
+let messageSender = require('./message-sender');
+
+const onMessageSent = (message) => {
+  const command = message.split(' ')[0];
+
+  if (modules[command]) {
+    modules[command](command, message)
       .then(response => {
         messageSender(response);
+      })
+      .catch(err => {
+        messageSender('BOOP BEEP ME DEAD');
       });
+  } else {
+    messageSender('I was not able to parse your command');
   }
 }
 

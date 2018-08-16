@@ -12,7 +12,7 @@ fs
     modules[item.replace('.js', '')] = require(MODULES_DIR + item);
   });
 
-const messageSender = require('./message-sender');
+let messageSender = require('./message-sender');
 
 const onMessageSent = (message) => {
   const command = message.split(' ')[0];
@@ -21,6 +21,9 @@ const onMessageSent = (message) => {
     modules[command](command, message)
       .then(response => {
         messageSender(response);
+      })
+      .catch(err => {
+        messageSender('BOOP BEEP ME DEAD');
       });
   } else {
     messageSender('I was not able to parse your command');

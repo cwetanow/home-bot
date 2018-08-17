@@ -55,6 +55,13 @@ const getLine = (type, name) => {
   }
 }
 
+const getRouteFirstLastStop = (route) => {
+  const firstStop = route.stops[0];
+  const lastStop = route.stops[route.stops.length - 1];
+
+  return `${firstStop.name} (${firstStop.code}) - ${lastStop.name} (${lastStop.code})`;
+}
+
 module.exports = (command, message) => {
   return new Promise((resolve, reject) => {
     const params = message.split(' ');
@@ -86,6 +93,11 @@ module.exports = (command, message) => {
 
         body.lines.forEach(line => {
           result += `${line.vehicle_type} ${line.name} `;
+
+          let lineInfo = getLine(line.vehicle_type, line.name);
+          const route = lineInfo.routes.find(r => !!r.codes.find(c => c === code));
+
+          result += getRouteFirstLastStop(route);
 
           line.arrivals.forEach(arrival => {
             result += ` ${arrival.time}`;
@@ -119,10 +131,7 @@ module.exports = (command, message) => {
 
           result += '\n';
         } else {
-          const firstStop = route.stops[0];
-          const lastStop = route.stops[route.stops.length - 1];
-
-          result += `${firstStop.name} (${firstStop.code}) - ${lastStop.name} (${lastStop.code})`;
+          result += getRouteFirstLastStop(route);
         }
 
         result += '\n';

@@ -1,6 +1,4 @@
-let request = require('request');
-
-const COMMAND_NAME = 'transport';
+const request = require('request');
 
 let stops = null;
 let routes = [];

@@ -35,6 +35,8 @@ const { RTMClient } = require('@slack/client');
 const rtm = new RTMClient(process.env.SLACK_BOT_OAUTH_ACCESS_TOKEN);
 rtm.start();
 var channel = "#general";
+
+console.log('RUNNING');
 rtm.on('message', (event) => {
   const message = event;
 

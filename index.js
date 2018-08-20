@@ -23,7 +23,8 @@ const onMessageSent = (message) => {
         messageSender(response);
       })
       .catch(err => {
-        messageSender('BOOP BEEP ME DEAD');
+        console.log(err);
+        messageSender('BOOP BEEP ME CRASH');
       });
   } else {
     messageSender('I was not able to parse your command');
@@ -44,6 +45,8 @@ rtm.on('message', (event) => {
     (!message.subtype && message.user === rtm.activeUserId)) {
     return;
   }
+
+  console.log(message.text);
 
   onMessageSent(message.text);
 });

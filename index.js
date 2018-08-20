@@ -38,6 +38,8 @@ rtm.start();
 var channel = "#general";
 
 console.log('RUNNING');
+messageSender('RUNNING');
+
 rtm.on('message', (event) => {
   const message = event;
 

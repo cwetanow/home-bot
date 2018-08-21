@@ -93,9 +93,12 @@ module.exports = (command, message) => {
           result += `${line.vehicle_type} ${line.name} `;
 
           let lineInfo = getLine(line.vehicle_type, line.name);
-          const route = lineInfo.routes.find(r => !!r.codes.find(c => c === code));
 
-          result += getRouteFirstLastStop(route);
+          if (lineInfo) {
+            const route = lineInfo.routes.find(r => !!r.codes.find(c => c === code));
+
+            result += getRouteFirstLastStop(route);
+          }
 
           line.arrivals.forEach(arrival => {
             result += ` ${arrival.time}`;

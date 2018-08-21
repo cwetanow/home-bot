@@ -15,7 +15,10 @@ fs
 let messageSender = require('./message-sender');
 
 const onMessageSent = (message) => {
-  const command = message.split(' ')[0];
+  let command = message.split(' ')[0];
+  if (command) {
+    command = command.toLowerCase();
+  }
 
   if (modules[command]) {
     modules[command](command, message)
